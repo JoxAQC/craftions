@@ -7,8 +7,8 @@ import { Menu } from 'lucide-react';
 export function AppHeader() {
   const navLinks = [
     { href: '/', label: 'Dashboard' },
-    { href: '/consultation', label: 'Consulta' },
-    { href: '/templates/create', label: 'Crear Plantilla' },
+    { href: '/agenda', label: 'Agenda' },
+    { href: '/templates/create', label: 'Gestión de Plantillas' },
   ];
 
   return (
@@ -30,6 +30,9 @@ export function AppHeader() {
                 <Link href={link.href}>{link.label}</Link>
               </Button>
             ))}
+            <Button variant="ghost" asChild>
+                <Link href="/consultation">Consulta</Link>
+            </Button>
           </nav>
           <div className="md:hidden">
             <Sheet>
@@ -51,6 +54,13 @@ export function AppHeader() {
                       <Link href={link.href}>{link.label}</Link>
                     </Button>
                   ))}
+                   <Button
+                      variant="ghost"
+                      className="justify-start text-lg"
+                      asChild
+                    >
+                      <Link href="/consultation">Consulta</Link>
+                    </Button>
                 </div>
               </SheetContent>
             </Sheet>

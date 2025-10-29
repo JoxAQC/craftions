@@ -14,6 +14,18 @@ export type Template = {
   fields: TemplateField[];
 };
 
+export type Treatment = {
+    id: string;
+    name: string;
+    description: string;
+}
+
+export const TREATMENTS_DATA: Treatment[] = [
+    { id: 'treat_htn', name: 'Tratamiento de Hipertensión', description: 'Seguimiento y control de la hipertensión arterial.' },
+    { id: 'treat_dbts', name: 'Control de Diabetes Mellitus 2', description: 'Monitorización de glucosa y ajuste de tratamiento.' },
+    { id: 'treat_postop', name: 'Cuidado Post-Operatorio', description: 'Revisión de herida quirúrgica y recuperación.' },
+];
+
 export const TEMPLATES_DATA: Template[] = [
   {
     id: 'tpl_med_general',
@@ -39,6 +51,28 @@ export const TEMPLATES_DATA: Template[] = [
       { id: 'c2', field_code: 'ECG', name: 'Resultado ECG', data_type: 'string' },
       { id: 'c3', field_code: 'COLES_LDL', name: 'Colesterol LDL', data_type: 'double', unit: 'mg/dL' },
       { id: 'c4', field_code: 'COLES_HDL', name: 'Colesterol HDL', data_type: 'double', unit: 'mg/dL' },
+    ],
+  },
+   {
+    id: 'tpl_control_diabetes',
+    name: 'Control Diabetes',
+    description: 'Plantilla para el control de la diabetes.',
+    type: 'treatment_control',
+    fields: [
+        { id: 'd1', field_code: 'GLU_PRE', name: 'Glucosa Pre-prandial', data_type: 'double', unit: 'mg/dL' },
+        { id: 'd2', field_code: 'GLU_POST', name: 'Glucosa Post-prandial', data_type: 'double', unit: 'mg/dL' },
+        { id: 'd3', field_code: 'SINTOMAS', name: 'Síntomas Reportados', data_type: 'string' },
+    ],
+  },
+  {
+    id: 'tpl_control_postop',
+    name: 'Control Post-Operatorio',
+    description: 'Plantilla para el seguimiento post-operatorio.',
+    type: 'treatment_control',
+    fields: [
+        { id: 'po1', field_code: 'HERIDA_Q', name: 'Aspecto de Herida Quirúrgica', data_type: 'string' },
+        { id: 'po2', field_code: 'DOLOR_ESC', name: 'Escala de Dolor (1-10)', data_type: 'double' },
+        { id: 'po3', field_code: 'FIEBRE', name: 'Fiebre', data_type: 'boolean' },
     ],
   },
   {
