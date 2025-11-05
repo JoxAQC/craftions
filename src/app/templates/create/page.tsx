@@ -28,29 +28,49 @@ import {
 } from '@/components/ui/form';
 import { createTemplateSchema, type CreateTemplateValues } from '@/lib/schemas';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, GripVertical } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { PREDEFINED_FIELDS_DATA } from '@/lib/data';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
 
 const defaultValues: CreateTemplateValues = {
   name: '',
   description: '',
   type: 'clinical_report',
-  fields: [
-    { field_code: 'MOTCON', name: 'Motivo de Consulta', data_type: 'string', unit: '' },
-  ],
+  fields: [],
 };
 
 export default function CreateTemplatePage() {
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  
   const form = useForm<CreateTemplateValues>({
     resolver: zodResolver(createTemplateSchema),
     defaultValues,
     mode: 'onBlur',
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, move } = useFieldArray({
     control: form.control,
     name: 'fields',
   });
+
+  const selectedFieldCodes = useMemo(() => {
+    return fields.map((field) => field.field_code);
+  }, [fields]);
 
   function onSubmit(data: CreateTemplateValues) {
     console.log('Datos de la plantilla:', data);
@@ -63,6 +83,23 @@ export default function CreateTemplatePage() {
       ),
     });
   }
+  
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (event: React.DragEvent, index: number) => {
+    event.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+    move(draggedIndex, index);
+    setDraggedIndex(index);
+  };
+  
+  const handleDrop = () => {
+    setDraggedIndex(null);
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -147,90 +184,63 @@ export default function CreateTemplatePage() {
             <CardHeader>
               <CardTitle>Campos de la Plantilla</CardTitle>
               <CardDescription>
-                Defina los campos que contendrá el formulario.
+                Busque y asocie los campos que contendrá el formulario. Puede reordenarlos arrastrándolos.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="p-4 border rounded-lg relative space-y-4 bg-secondary/30"
+                    className="p-4 border rounded-lg relative space-y-4 bg-secondary/30 flex items-center gap-4"
+                    draggable
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDrop={handleDrop}
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name={`fields.${index}.field_code`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Código del Campo</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Ej: T1" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`fields.${index}.name`}
-                        render={({ field }) => (
-                          <FormItem>
+                    <GripVertical className="cursor-move text-muted-foreground" />
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+                        <div>
                             <FormLabel>Nombre del Campo</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Ej: Temperatura" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name={`fields.${index}.data_type`}
-                        render={({ field }) => (
-                          <FormItem>
+                            <p className="font-semibold">{field.name}</p>
+                        </div>
+                        <div>
                             <FormLabel>Tipo de Dato</FormLabel>
-                            <Select
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="string">Texto</SelectItem>
-                                <SelectItem value="double">Número</SelectItem>
-                                <SelectItem value="boolean">Sí/No</SelectItem>
-                                <SelectItem value="date">Fecha</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name={`fields.${index}.unit`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Unidad (Opcional)</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Ej: °C, mg/dL" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                            <Badge variant="outline" className="capitalize">{field.data_type}</Badge>
+                        </div>
+                        <div>
+                            <FormLabel>Unidad</FormLabel>
+                            <p className="text-sm text-muted-foreground">{field.unit || 'N/A'}</p>
+                        </div>
+                         <FormField
+                            control={form.control}
+                            name={`fields.${index}.required`}
+                            render={({ field: selectField }) => (
+                              <FormItem>
+                                <FormLabel>Requerido</FormLabel>
+                                <Select
+                                    onValueChange={(value) => selectField.onChange(value === 'true')}
+                                    defaultValue={String(selectField.value)}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="true">Sí</SelectItem>
+                                    <SelectItem value="false">No</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormItem>
+                            )}
+                          />
                     </div>
                     <Button
                       type="button"
                       variant="destructive"
                       size="icon"
-                      className="absolute top-2 right-2"
+                      className="shrink-0"
                       onClick={() => remove(index)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -238,22 +248,55 @@ export default function CreateTemplatePage() {
                     </Button>
                   </div>
                 ))}
+                 {fields.length === 0 && (
+                  <div className="text-center text-muted-foreground py-8">
+                    Aún no ha añadido campos.
+                  </div>
+                )}
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                className="mt-6"
-                onClick={() =>
-                  append({
-                    field_code: '',
-                    name: '',
-                    data_type: 'string',
-                    unit: '',
-                  })
-                }
-              >
-                <Plus className="mr-2 h-4 w-4" /> Añadir Campo
-              </Button>
+              <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={open}
+                        className="mt-6"
+                    >
+                        <Plus className="mr-2 h-4 w-4" /> Añadir Campo
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[400px] p-0">
+                    <Command>
+                      <CommandInput placeholder="Buscar campo..." />
+                      <CommandList>
+                        <CommandEmpty>No se encontraron campos.</CommandEmpty>
+                        <CommandGroup>
+                          {PREDEFINED_FIELDS_DATA.map((predefField) => (
+                            <CommandItem
+                              key={predefField.field_code}
+                              value={predefField.name}
+                              disabled={selectedFieldCodes.includes(predefField.field_code)}
+                              onSelect={() => {
+                                append({
+                                  field_code: predefField.field_code,
+                                  name: predefField.name,
+                                  data_type: predefField.data_type,
+                                  unit: predefField.unit || '',
+                                  required: true,
+                                });
+                                setOpen(false);
+                              }}
+                            >
+                              {predefField.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
               <FormField
                 control={form.control}
                 name="fields"

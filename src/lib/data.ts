@@ -1,3 +1,10 @@
+export type PredefinedField = {
+    field_code: string;
+    name: string;
+    data_type: 'string' | 'double' | 'boolean' | 'date';
+    unit?: string;
+}
+
 export type TemplateField = {
   id: string;
   field_code: string;
@@ -20,6 +27,34 @@ export type Treatment = {
     description: string;
 }
 
+export const PREDEFINED_FIELDS_DATA: PredefinedField[] = [
+    { field_code: 'MOTCON', name: 'Motivo de Consulta', data_type: 'string' },
+    { field_code: 'ANTEC', name: 'Antecedentes Relevantes', data_type: 'string' },
+    { field_code: 'PRES_ART', name: 'Presión Arterial', data_type: 'string', unit: 'mmHg' },
+    { field_code: 'TEMP', name: 'Temperatura', data_type: 'double', unit: '°C' },
+    { field_code: 'GLUC', name: 'Glucosa', data_type: 'double', unit: 'mg/dL' },
+    { field_code: 'DIAG_PLAN', name: 'Diagnóstico y Plan', data_type: 'string' },
+    { field_code: 'DOL_TOR', name: 'Dolor Torácico', data_type: 'boolean' },
+    { field_code: 'ECG_RES', name: 'Resultado ECG', data_type: 'string' },
+    { field_code: 'COLES_LDL', name: 'Colesterol LDL', data_type: 'double', unit: 'mg/dL' },
+    { field_code: 'COLES_HDL', name: 'Colesterol HDL', data_type: 'double', unit: 'mg/dL' },
+    { field_code: 'GLU_PRE', name: 'Glucosa Pre-prandial', data_type: 'double', unit: 'mg/dL' },
+    { field_code: 'GLU_POST', name: 'Glucosa Post-prandial', data_type: 'double', unit: 'mg/dL' },
+    { field_code: 'SINTOMAS', name: 'Síntomas Reportados', data_type: 'string' },
+    { field_code: 'HERIDA_Q', name: 'Aspecto de Herida Quirúrgica', data_type: 'string' },
+    { field_code: 'DOLOR_ESC', name: 'Escala de Dolor (1-10)', data_type: 'double' },
+    { field_code: 'FIEBRE', name: 'Fiebre', data_type: 'boolean' },
+    { field_code: 'HEMO', name: 'Hemoglobina', data_type: 'double', unit: 'g/dL' },
+    { field_code: 'HEMAT', name: 'Hematocrito', data_type: 'double', unit: '%' },
+    { field_code: 'PLAQ', name: 'Plaquetas', data_type: 'double', unit: 'x10^3/μL' },
+    { field_code: 'PESO', name: 'Peso Corporal', data_type: 'double', unit: 'kg' },
+    { field_code: 'TALLA', name: 'Talla', data_type: 'double', unit: 'cm' },
+    { field_code: 'IMC', name: 'Índice de Masa Corporal (IMC)', data_type: 'double', unit: 'kg/m²' },
+    { field_code: 'SAT_O2', name: 'Saturación de Oxígeno', data_type: 'double', unit: '%' },
+    { field_code: 'FREQ_CARD', name: 'Frecuencia Cardíaca', data_type: 'double', unit: 'lpm' },
+    { field_code: 'FREQ_RESP', name: 'Frecuencia Respiratoria', data_type: 'double', unit: 'rpm' },
+];
+
 export const TREATMENTS_DATA: Treatment[] = [
     { id: 'treat_htn', name: 'Tratamiento de Hipertensión', description: 'Seguimiento y control de la hipertensión arterial.' },
     { id: 'treat_dbts', name: 'Control de Diabetes Mellitus 2', description: 'Monitorización de glucosa y ajuste de tratamiento.' },
@@ -38,7 +73,7 @@ export const TEMPLATES_DATA: Template[] = [
       { id: 'f3', field_code: 'PRES_ART', name: 'Presión Arterial', data_type: 'string', unit: 'mmHg' },
       { id: 'f4', field_code: 'TEMP', name: 'Temperatura', data_type: 'double', unit: '°C' },
       { id: 'f5', field_code: 'GLUC', name: 'Glucosa', data_type: 'double', unit: 'mg/dL' },
-      { id: 'f6', field_code: 'DIAG', name: 'Diagnóstico y Plan', data_type: 'string' },
+      { id: 'f6', field_code: 'DIAG_PLAN', name: 'Diagnóstico y Plan', data_type: 'string' },
     ],
   },
   {
@@ -48,7 +83,7 @@ export const TEMPLATES_DATA: Template[] = [
     type: 'clinical_report',
     fields: [
       { id: 'c1', field_code: 'DOL_TOR', name: 'Dolor Torácico', data_type: 'boolean' },
-      { id: 'c2', field_code: 'ECG', name: 'Resultado ECG', data_type: 'string' },
+      { id: 'c2', field_code: 'ECG_RES', name: 'Resultado ECG', data_type: 'string' },
       { id: 'c3', field_code: 'COLES_LDL', name: 'Colesterol LDL', data_type: 'double', unit: 'mg/dL' },
       { id: 'c4', field_code: 'COLES_HDL', name: 'Colesterol HDL', data_type: 'double', unit: 'mg/dL' },
     ],
