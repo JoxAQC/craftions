@@ -198,19 +198,25 @@ export default function CreateTemplatePage() {
                     onDragOver={(e) => handleDragOver(e, index)}
                     onDrop={handleDrop}
                   >
-                    <GripVertical className="cursor-move text-muted-foreground" />
+                    <div className="flex items-center gap-2">
+                        <GripVertical className="cursor-move text-muted-foreground" />
+                        <span className="font-bold text-lg text-primary">{index + 1}.</span>
+                    </div>
                     <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
                         <div>
                             <FormLabel>Nombre del Campo</FormLabel>
-                            <p className="font-semibold">{field.name}</p>
+                            <div className="flex items-center gap-2 mt-1">
+                                <p className="font-semibold">{field.name}</p>
+                                <Badge variant="secondary">Predefinido</Badge>
+                            </div>
                         </div>
                         <div>
                             <FormLabel>Tipo de Dato</FormLabel>
-                            <Badge variant="outline" className="capitalize">{field.data_type}</Badge>
+                            <Badge variant="outline" className="capitalize mt-1">{field.data_type}</Badge>
                         </div>
                         <div>
                             <FormLabel>Unidad</FormLabel>
-                            <p className="text-sm text-muted-foreground">{field.unit || 'N/A'}</p>
+                            <p className="text-sm text-muted-foreground mt-1">{field.unit || 'N/A'}</p>
                         </div>
                          <FormField
                             control={form.control}
