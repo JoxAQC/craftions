@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import { Menu } from 'lucide-react';
 
 export function AppHeader() {
   const navLinks = [
-    { href: '/', label: 'Dashboard' },
+    { href: '/dashboard', label: 'Dashboard' },
     { href: '/agenda', label: 'Agenda' },
     { href: '/templates/create', label: 'Gestión de Plantillas' },
   ];
@@ -17,7 +18,7 @@ export function AppHeader() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link
-              href="/"
+              href="/dashboard"
               className="flex items-center gap-2 text-xl font-bold text-primary"
             >
               <Stethoscope className="h-7 w-7" />
