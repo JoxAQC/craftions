@@ -1,14 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlusCircle, Clock, User, Stethoscope } from 'lucide-react';
 import Link from 'next/link';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 // Datos simulados de citas
-const appointments = [
+const allAppointments = [
   {
     id: 'apt1',
+    date: new Date(),
     time: '09:00',
     patient: 'Juan Pérez',
     type: 'Consulta Nueva',
@@ -18,6 +23,7 @@ const appointments = [
   },
   {
     id: 'apt2',
+    date: new Date(),
     time: '10:30',
     patient: 'María Gómez',
     type: 'Control Diabetes',
@@ -27,6 +33,7 @@ const appointments = [
   },
   {
     id: 'apt3',
+    date: new Date(),
     time: '11:00',
     patient: 'Carlos López',
     type: 'Consulta General',
@@ -36,6 +43,7 @@ const appointments = [
   },
   {
     id: 'apt4',
+    date: new Date(new Date().setDate(new Date().getDate() + 1)), // Cita para mañana
     time: '14:00',
     patient: 'Ana Torres',
     type: 'Control Post-Operatorio',
@@ -46,9 +54,16 @@ const appointments = [
 ];
 
 export default function AgendaPage() {
-  const today = new Date();
-  const dayName = today.toLocaleDateString('es-ES', { weekday: 'long' });
-  const dayMonth = today.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const selectedDayString = date ? format(date, 'yyyy-MM-dd') : '';
+
+  const appointments = allAppointments.filter(
+    (apt) => format(apt.date, 'yyyy-MM-dd') === selectedDayString
+  );
+
+  const selectedDayName = date ? format(date, 'eeee', { locale: es }) : '';
+  const selectedDayMonth = date ? format(date, "d 'de' MMMM", { locale: es }) : '';
 
   return (
     <div className="flex flex-col gap-8">
@@ -56,7 +71,7 @@ export default function AgendaPage() {
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl font-bold tracking-tight">Agenda / Calendario</h1>
           <p className="text-muted-foreground">
-            Vista semanal de citas programadas.
+            Vista de citas programadas. Seleccione un día para ver los detalles.
           </p>
         </div>
         <Button asChild>
@@ -67,44 +82,59 @@ export default function AgendaPage() {
         </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="capitalize">
-            Citas para Hoy: {dayName}, {dayMonth}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {appointments.map((apt) => (
-              <Link href={apt.href} key={apt.id}>
-                <div className={`p-4 rounded-lg border h-full flex flex-col cursor-pointer transition-all hover:shadow-lg hover:border-primary ${apt.isControl ? 'bg-blue-900/10 border-blue-500/30' : 'bg-secondary/50'}`}>
-                  <div className="flex items-center gap-3 mb-3">
-                    <Clock className="w-5 h-5 text-primary" />
-                    <span className="text-xl font-bold">{apt.time}</span>
-                  </div>
-                  <div className="space-y-2 flex-1">
-                    <p className="font-semibold text-lg">{apt.type}</p>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <User className="w-4 h-4" />
-                      <span>{apt.patient}</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="md:col-span-1">
+            <Card>
+                <CardContent className="p-0">
+                    <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        className="rounded-md"
+                        locale={es}
+                    />
+                </CardContent>
+            </Card>
+        </div>
+        <div className="md:col-span-2">
+          <Card className="min-h-[365px]">
+            <CardHeader>
+              <CardTitle className="capitalize">
+                Citas para: {selectedDayName}, {selectedDayMonth}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {appointments.length > 0 ? (
+                appointments.map((apt) => (
+                  <Link href={apt.href} key={apt.id}>
+                    <div className={`p-4 rounded-lg border h-full flex flex-col cursor-pointer transition-all hover:shadow-lg hover:border-primary ${apt.isControl ? 'bg-blue-900/10 border-blue-500/30' : 'bg-secondary/50'}`}>
+                      <div className="flex items-center gap-3 mb-2">
+                        <Clock className="w-5 h-5 text-primary" />
+                        <span className="text-lg font-bold">{apt.time}</span>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="font-semibold">{apt.type}</p>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <User className="w-4 h-4" />
+                          <span>{apt.patient}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Stethoscope className="w-4 h-4" />
+                          <span>{apt.doctor}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Stethoscope className="w-4 h-4" />
-                      <span>{apt.doctor}</span>
-                    </div>
-                  </div>
+                  </Link>
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg">
+                    <p>No hay citas para el día seleccionado.</p>
                 </div>
-              </Link>
-            ))}
-             <Link href="/appointments/create">
-                <div className="p-4 rounded-lg border-2 border-dashed h-full flex flex-col items-center justify-center cursor-pointer transition-all hover:border-primary hover:text-primary hover:bg-secondary/30">
-                    <PlusCircle className="w-10 h-10 mb-2 text-muted-foreground group-hover:text-primary transition-colors" />
-                    <span className="font-semibold">Agendar Cita</span>
-                </div>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
