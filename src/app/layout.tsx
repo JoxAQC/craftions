@@ -15,6 +15,8 @@ export default function RootLayout({
   const noHeaderPaths = ['/', '/login'];
   const showHeader = !noHeaderPaths.includes(pathname);
 
+  const isAuthPage = noHeaderPaths.includes(pathname);
+
   return (
     <html lang="es" className="dark">
       <head>
@@ -32,9 +34,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased min-h-screen bg-background text-foreground">
-        <div className="relative flex min-h-screen flex-col">
+        <div className={`relative flex min-h-screen flex-col ${isAuthPage ? 'items-center justify-center p-4' : ''}`}>
+           {isAuthPage && (
+            <div className="absolute inset-0 -z-10 h-full w-full bg-[radial-gradient(#0c2a44_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          )}
           {showHeader && <AppHeader />}
-          <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+          <main className={`flex-1 w-full ${!isAuthPage ? 'container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col' : 'flex flex-col items-center justify-center'}`}>
             {children}
           </main>
         </div>

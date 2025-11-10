@@ -19,7 +19,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center -mt-16">
+    <div className="flex items-center justify-center w-full">
       <Card className="w-full max-w-sm">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">

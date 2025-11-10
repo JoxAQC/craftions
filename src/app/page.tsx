@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function WelcomePage() {
   return (
-    <div className="flex flex-col items-center justify-center text-center -mt-16">
+    <div className="flex flex-col items-center justify-center text-center">
       <Stethoscope className="w-24 h-24 text-primary mb-6" />
       <h1 className="text-5xl font-extrabold tracking-tight mb-4">
         Bienvenido a MediSim
