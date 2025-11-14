@@ -27,6 +27,37 @@ export type Treatment = {
     description: string;
 }
 
+export type Patient = {
+    id: string;
+    name: string;
+    lastName: string;
+    document: string;
+    email: string;
+    phone: string;
+    lastVisit: string;
+}
+
+export const PATIENTS_DATA: Patient[] = [
+    { id: 'p1', name: 'Juan', lastName: 'Pérez', document: '12345678A', email: 'juan.perez@example.com', phone: '611223344', lastVisit: '2024-05-10' },
+    { id: 'p2', name: 'María', lastName: 'Gómez', document: '87654321B', email: 'maria.gomez@example.com', phone: '622334455', lastVisit: '2024-05-08' },
+    { id: 'p3', name: 'Carlos', lastName: 'López', document: '11223344C', email: 'carlos.lopez@example.com', phone: '633445566', lastVisit: '2024-04-22' },
+    { id: 'p4', name: 'Ana', lastName: 'Torres', document: '44556677D', email: 'ana.torres@example.com', phone: '644556677', lastVisit: '2024-05-12' },
+];
+
+export const COUNTRIES_DATA = [
+    { code: 'ES', name: 'España' },
+    { code: 'MX', name: 'México' },
+    { code: 'CO', name: 'Colombia' },
+    { code: 'AR', name: 'Argentina' },
+    { code: 'PE', name: 'Perú' },
+    { code: 'VE', name: 'Venezuela' },
+    { code: 'CL', name: 'Chile' },
+    { code: 'EC', name: 'Ecuador' },
+    { code: 'GT', name: 'Guatemala' },
+    { code: 'US', name: 'Estados Unidos' },
+];
+
+
 export const PREDEFINED_FIELDS_DATA: PredefinedField[] = [
     { field_code: 'MOTCON', name: 'Motivo de Consulta', data_type: 'string' },
     { field_code: 'ANTEC', name: 'Antecedentes Relevantes', data_type: 'string' },

@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { usePathname } from 'next/navigation';
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarContent, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Stethoscope, LayoutDashboard, Calendar, FileText } from 'lucide-react';
+import { Stethoscope, LayoutDashboard, Calendar, FileText, Users } from 'lucide-react';
 
 export default function RootLayout({
   children,
@@ -23,6 +23,7 @@ export default function RootLayout({
   const navLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/agenda', label: 'Agenda', icon: Calendar },
+    { href: '/patients', label: 'Pacientes', icon: Users },
     { href: '/templates/create', label: 'Plantillas', icon: FileText },
   ];
 
@@ -65,7 +66,7 @@ export default function RootLayout({
                     {navLinks.map((link) => (
                       <SidebarMenuItem key={link.href}>
                          <Link href={link.href} passHref legacyBehavior>
-                           <SidebarMenuButton isActive={pathname === link.href} tooltip={link.label}>
+                           <SidebarMenuButton isActive={pathname.startsWith(link.href)} tooltip={link.label}>
                              <link.icon/>
                              <span>{link.label}</span>
                            </SidebarMenuButton>
