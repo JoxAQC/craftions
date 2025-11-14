@@ -4,6 +4,7 @@ import { Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
+import { SidebarTrigger } from './ui/sidebar';
 
 export function AppHeader() {
   const navLinks = [
@@ -16,7 +17,8 @@ export function AppHeader() {
     <header className="bg-card border-b sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            <SidebarTrigger className="md:hidden"/>
             <Link
               href="/dashboard"
               className="flex items-center gap-2 text-xl font-bold text-primary"
@@ -35,37 +37,6 @@ export function AppHeader() {
                 <Link href="/consultation">Consulta</Link>
             </Button>
           </nav>
-          <div className="md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu />
-                  <span className="sr-only">Abrir menú</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <div className="flex flex-col space-y-4 mt-8">
-                  {navLinks.map((link) => (
-                    <Button
-                      variant="ghost"
-                      className="justify-start text-lg"
-                      asChild
-                      key={link.href}
-                    >
-                      <Link href={link.href}>{link.label}</Link>
-                    </Button>
-                  ))}
-                   <Button
-                      variant="ghost"
-                      className="justify-start text-lg"
-                      asChild
-                    >
-                      <Link href="/consultation">Consulta</Link>
-                    </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
         </div>
       </div>
     </header>
