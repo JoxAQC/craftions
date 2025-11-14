@@ -34,14 +34,60 @@ export type Patient = {
     document: string;
     email: string;
     phone: string;
+    birthDate: string;
+    gender: string;
+    address: string;
+    city: string;
+    country: string;
     lastVisit: string;
+    occupation?: string;
+    lifestyle?: { title: string; description: string }[];
+    allergies?: { substance: string; reaction: string; severity: 'leve' | 'moderada' | 'severa' }[];
+    chronicConditions?: { condition: string; diagnosed: string }[];
+    disabilities?: { disability: string; details: string }[];
+    vaccinations?: { vaccine: string; date: string }[];
+    currentMedication?: { medication: string; dosage: string; frequency: string }[];
 }
 
 export const PATIENTS_DATA: Patient[] = [
-    { id: 'p1', name: 'Juan', lastName: 'Pérez', document: '12345678A', email: 'juan.perez@example.com', phone: '611223344', lastVisit: '2024-05-10' },
-    { id: 'p2', name: 'María', lastName: 'Gómez', document: '87654321B', email: 'maria.gomez@example.com', phone: '622334455', lastVisit: '2024-05-08' },
-    { id: 'p3', name: 'Carlos', lastName: 'López', document: '11223344C', email: 'carlos.lopez@example.com', phone: '633445566', lastVisit: '2024-04-22' },
-    { id: 'p4', name: 'Ana', lastName: 'Torres', document: '44556677D', email: 'ana.torres@example.com', phone: '644556677', lastVisit: '2024-05-12' },
+    { 
+        id: 'p1', 
+        name: 'Juan', 
+        lastName: 'Pérez', 
+        document: '12345678A', 
+        email: 'juan.perez@example.com', 
+        phone: '611223344',
+        birthDate: '1979-03-15',
+        gender: 'Masculino',
+        address: 'Calle Falsa 123',
+        city: 'Madrid',
+        country: 'España',
+        lastVisit: '2024-05-10',
+        occupation: 'Arquitecto',
+        lifestyle: [
+            { title: 'Ejercicio', description: 'Corre 3 veces por semana.' },
+            { title: 'Dieta', description: 'Dieta mediterránea, bajo en sal.' },
+        ],
+        allergies: [
+            { substance: 'Penicilina', reaction: 'Urticaria', severity: 'moderada' },
+        ],
+        chronicConditions: [
+            { condition: 'Hipertensión Arterial', diagnosed: '2020-01-10' },
+            { condition: 'Diabetes Mellitus Tipo 2', diagnosed: '2022-06-20' },
+        ],
+        disabilities: [],
+        vaccinations: [
+            { vaccine: 'Gripe (Influenza)', date: '2023-10-05' },
+            { vaccine: 'COVID-19 (Refuerzo)', date: '2023-12-15' },
+        ],
+        currentMedication: [
+            { medication: 'Losartán', dosage: '50mg', frequency: '1 vez al día' },
+            { medication: 'Metformina', dosage: '850mg', frequency: '2 veces al día' },
+        ]
+    },
+    { id: 'p2', name: 'María', lastName: 'Gómez', document: '87654321B', email: 'maria.gomez@example.com', phone: '622334455', birthDate: '1990-07-22', gender: 'Femenino', address: 'Avenida Siempre Viva 742', city: 'Barcelona', country: 'España', lastVisit: '2024-05-08' },
+    { id: 'p3', name: 'Carlos', lastName: 'López', document: '11223344C', email: 'carlos.lopez@example.com', phone: '633445566', birthDate: '1985-11-02', gender: 'Masculino', address: 'Plaza Mayor 1', city: 'Sevilla', country: 'España', lastVisit: '2024-04-22' },
+    { id: 'p4', name: 'Ana', lastName: 'Torres', document: '44556677D', email: 'ana.torres@example.com', phone: '644556677', birthDate: '2000-01-30', gender: 'Femenino', address: 'Calle Luna 4', city: 'Valencia', country: 'España', lastVisit: '2024-05-12' },
 ];
 
 export const COUNTRIES_DATA = [

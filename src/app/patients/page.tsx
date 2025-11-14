@@ -68,7 +68,7 @@ export default function PatientsPage() {
             </TableHeader>
             <TableBody>
               {PATIENTS_DATA.map((patient) => (
-                <TableRow key={patient.id} className="cursor-pointer" onClick={() => router.push(`/patients/details/${patient.id}`)}>
+                <TableRow key={patient.id} className="cursor-pointer hover:bg-muted/50" onClick={() => router.push(`/patients/details/${patient.id}`)}>
                   <TableCell className="font-medium">{`${patient.name} ${patient.lastName}`}</TableCell>
                   <TableCell>{patient.document}</TableCell>
                   <TableCell>{patient.email}</TableCell>
