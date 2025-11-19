@@ -47,6 +47,7 @@ export type Patient = {
     disabilities?: { disability: string; details: string }[];
     vaccinations?: { vaccine: string; date: string }[];
     currentMedication?: { medication: string; dosage: string; frequency: string }[];
+    incapacities?: { type: string; specialty: string; startDate: string; endDate: string, detail: string, status: string }[];
 }
 
 export const PATIENTS_DATA: Patient[] = [
@@ -83,6 +84,9 @@ export const PATIENTS_DATA: Patient[] = [
         currentMedication: [
             { medication: 'Losartán', dosage: '50mg', frequency: '1 vez al día' },
             { medication: 'Metformina', dosage: '850mg', frequency: '2 veces al día' },
+        ],
+        incapacities: [
+            { type: 'Parcial', specialty: 'Traumatología', startDate: '2023-01-10', endDate: '2023-01-25', detail: 'Esguince de tobillo', status: 'Finalizada' }
         ]
     },
     { id: 'p2', name: 'María', lastName: 'Gómez', document: '87654321B', email: 'maria.gomez@example.com', phone: '622334455', birthDate: '1990-07-22', gender: 'Femenino', address: 'Avenida Siempre Viva 742', city: 'Barcelona', country: 'España', lastVisit: '2024-05-08' },
