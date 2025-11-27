@@ -30,6 +30,8 @@ import {
   TrendingUp,
   History,
   ClipboardList,
+  Heart,
+  FileKey,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AddRecordDialog } from './_components/add-record-dialog';
@@ -44,6 +46,8 @@ import {
 } from './_components/record-forms';
 import { use } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 function InfoPill({
   label,
@@ -102,7 +106,7 @@ function SectionCard({
 }
 
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
-  const patient = PATIENTS_DATA.find((p) => p.id === params.id);
+  const patient = PATIENTS_DATA.find((p) => p.id === use(params).id);
 
   if (!patient) {
     notFound();
@@ -160,6 +164,34 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
             <TabsTrigger value="security"><Shield className="mr-2"/>Seguridad</TabsTrigger>
         </TabsList>
         <TabsContent value="general" className="mt-6">
+             <Card className="mb-8">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                    <Heart className="w-6 h-6 text-primary"/>
+                    <CardTitle className="text-xl">Información Médica Clave</CardTitle>
+                </div>
+                <CardDescription>Datos médicos esenciales del paciente.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="space-y-2">
+                    <Label htmlFor="blood-type">Tipo de Sangre</Label>
+                    <Input id="blood-type" defaultValue="O+" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="medical-secure">Seguro Médico</Label>
+                    <Input id="medical-secure" defaultValue="Sanitas" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="secure-code">Código de Seguro</Label>
+                    <Input id="secure-code" defaultValue="SNT-987654321" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="patient-id">ID de Paciente</Label>
+                    <Input id="patient-id" defaultValue={patient.id} readOnly />
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Occupation */}
                 <SectionCard title="Ocupación" icon={Briefcase} form={<OccupationForm />}>
@@ -370,5 +402,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
     </div>
   );
 }
+
+    
 
     
