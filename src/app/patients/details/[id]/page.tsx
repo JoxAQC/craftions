@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -25,6 +26,10 @@ import {
   Accessibility,
   Apple,
   FileText,
+  Contact,
+  TrendingUp,
+  History,
+  ClipboardList,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AddRecordDialog } from './_components/add-record-dialog';
@@ -38,6 +43,7 @@ import {
   VaccinationForm,
 } from './_components/record-forms';
 import { use } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 function InfoPill({
   label,
@@ -145,191 +151,224 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Occupation */}
-        <SectionCard title="Ocupación" icon={Briefcase} form={<OccupationForm />}>
-          {patient.occupation ? (
-            <p className="text-sm">{patient.occupation}</p>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
+      <Tabs defaultValue="general" className="w-full">
+        <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="general"><ClipboardList className="mr-2"/>General</TabsTrigger>
+            <TabsTrigger value="contacts"><Contact className="mr-2"/>Contactos</TabsTrigger>
+            <TabsTrigger value="evolution"><TrendingUp className="mr-2"/>Evolución</TabsTrigger>
+            <TabsTrigger value="history"><History className="mr-2"/>Historial</TabsTrigger>
+            <TabsTrigger value="security"><Shield className="mr-2"/>Seguridad</TabsTrigger>
+        </TabsList>
+        <TabsContent value="general" className="mt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Occupation */}
+                <SectionCard title="Ocupación" icon={Briefcase} form={<OccupationForm />}>
+                {patient.occupation ? (
+                    <p className="text-sm">{patient.occupation}</p>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
 
-        {/* Lifestyle */}
-        <SectionCard title="Estilo de Vida" icon={Apple} form={<LifestyleForm />}>
-          {patient.lifestyle && patient.lifestyle.length > 0 ? (
-            <ul className="space-y-2 text-sm">
-              {patient.lifestyle.map((item, i) => (
-                <li key={i}>
-                  <span className="font-semibold">{item.title}:</span>{' '}
-                  {item.description}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
+                {/* Lifestyle */}
+                <SectionCard title="Estilo de Vida" icon={Apple} form={<LifestyleForm />}>
+                {patient.lifestyle && patient.lifestyle.length > 0 ? (
+                    <ul className="space-y-2 text-sm">
+                    {patient.lifestyle.map((item, i) => (
+                        <li key={i}>
+                        <span className="font-semibold">{item.title}:</span>{' '}
+                        {item.description}
+                        </li>
+                    ))}
+                    </ul>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
 
-        {/* Allergies */}
-        <SectionCard title="Alergias" icon={Shield} form={<AllergyForm />}>
-          {patient.allergies && patient.allergies.length > 0 ? (
-            <div className="space-y-2">
-              {patient.allergies.map((allergy, i) => (
-                <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
-                  <div className="flex justify-between items-center">
-                    <p className="font-semibold">{allergy.substance}</p>
-                    <Badge
-                      variant={
-                        allergy.severity === 'severa' ? 'destructive' : 'secondary'
-                      }
-                    >
-                      {allergy.severity}
-                    </Badge>
-                  </div>
-                  <p className="text-muted-foreground">{allergy.reaction}</p>
-                </div>
-              ))}
+                {/* Allergies */}
+                <SectionCard title="Alergias" icon={Shield} form={<AllergyForm />}>
+                {patient.allergies && patient.allergies.length > 0 ? (
+                    <div className="space-y-2">
+                    {patient.allergies.map((allergy, i) => (
+                        <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold">{allergy.substance}</p>
+                            <Badge
+                            variant={
+                                allergy.severity === 'severa' ? 'destructive' : 'secondary'
+                            }
+                            >
+                            {allergy.severity}
+                            </Badge>
+                        </div>
+                        <p className="text-muted-foreground">{allergy.reaction}</p>
+                        </div>
+                    ))}
+                    </div>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
+
+                {/* Chronic Conditions */}
+                <SectionCard
+                title="Condiciones Crónicas"
+                icon={HeartPulse}
+                form={<ConditionForm />}
+                >
+                {patient.chronicConditions && patient.chronicConditions.length > 0 ? (
+                    <ul className="space-y-2 text-sm list-disc list-inside">
+                    {patient.chronicConditions.map((item, i) => (
+                        <li key={i}>
+                        {item.condition}{' '}
+                        <span className="text-muted-foreground">
+                            (Diagnóstico:{' '}
+                            {format(new Date(item.diagnosed), 'MMM yyyy', {
+                            locale: es,
+                            })}
+                            )
+                        </span>
+                        </li>
+                    ))}
+                    </ul>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
+
+                {/* Disabilities */}
+                <SectionCard
+                title="Discapacidades"
+                icon={Accessibility}
+                form={<></>} // Placeholder for Disabilities Form
+                >
+                {patient.disabilities && patient.disabilities.length > 0 ? (
+                    <ul className="space-y-2 text-sm list-disc list-inside">
+                    {patient.disabilities.map((item, i) => (
+                        <li key={i}>
+                        {item.disability}:{' '}
+                        <span className="text-muted-foreground">{item.details}</span>
+                        </li>
+                    ))}
+                    </ul>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
+                
+                {/* Incapacities */}
+                <SectionCard title="Incapacidades" icon={FileText} form={<IncapacityForm />}>
+                    {patient.incapacities && patient.incapacities.length > 0 ? (
+                        <div className="space-y-2">
+                            {patient.incapacities.map((item, i) => {
+                                const totalDays = differenceInDays(new Date(item.endDate), new Date(item.startDate));
+                                return (
+                                    <div key={i} className="text-sm p-3 bg-secondary/50 rounded-md">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <p className="font-semibold">{item.specialty} - <span className='capitalize'>{item.type}</span></p>
+                                            <Badge variant={item.status === 'Activa' ? 'default' : item.status === 'Finalizada' ? 'outline' : 'destructive'}>{item.status}</Badge>
+                                        </div>
+                                        <p className="text-muted-foreground">{item.detail}</p>
+                                        <Separator className="my-2" />
+                                        <div className="flex justify-between text-xs text-muted-foreground">
+                                            <span>Inicio: {format(new Date(item.startDate), 'P', { locale: es })}</span>
+                                            <span>Fin: {format(new Date(item.endDate), 'P', { locale: es })}</span>
+                                            <span>Días: {totalDays}</span>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No hay datos de incapacidades registrados.</p>
+                    )}
+                </SectionCard>
+
+
+                {/* Vaccinations */}
+                <SectionCard
+                title="Vacunaciones"
+                icon={Syringe}
+                form={<VaccinationForm />}
+                >
+                {patient.vaccinations && patient.vaccinations.length > 0 ? (
+                    <ul className="space-y-2 text-sm list-disc list-inside">
+                    {patient.vaccinations.map((item, i) => (
+                        <li key={i}>
+                        {item.vaccine} -{' '}
+                        <span className="text-muted-foreground">
+                            {format(new Date(item.date), 'dd/MM/yyyy')}
+                        </span>
+                        </li>
+                    ))}
+                    </ul>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
+
+                {/* Current Medication */}
+                <SectionCard
+                title="Medicación Actual"
+                icon={Pill}
+                form={<MedicationForm />}
+                >
+                {patient.currentMedication &&
+                patient.currentMedication.length > 0 ? (
+                    <div className="space-y-2">
+                    {patient.currentMedication.map((med, i) => (
+                        <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
+                        <p className="font-semibold">{med.medication}</p>
+                        <p className="text-muted-foreground">
+                            {med.dosage} - {med.frequency}
+                        </p>
+                        </div>
+                    ))}
+                    </div>
+                ) : (
+                    <p className="text-sm text-muted-foreground">
+                    No hay datos registrados.
+                    </p>
+                )}
+                </SectionCard>
             </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
-
-        {/* Chronic Conditions */}
-        <SectionCard
-          title="Condiciones Crónicas"
-          icon={HeartPulse}
-          form={<ConditionForm />}
-        >
-          {patient.chronicConditions && patient.chronicConditions.length > 0 ? (
-            <ul className="space-y-2 text-sm list-disc list-inside">
-              {patient.chronicConditions.map((item, i) => (
-                <li key={i}>
-                  {item.condition}{' '}
-                  <span className="text-muted-foreground">
-                    (Diagnóstico:{' '}
-                    {format(new Date(item.diagnosed), 'MMM yyyy', {
-                      locale: es,
-                    })}
-                    )
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
-
-        {/* Disabilities */}
-        <SectionCard
-          title="Discapacidades"
-          icon={Accessibility}
-          form={<></>} // Placeholder for Disabilities Form
-        >
-          {patient.disabilities && patient.disabilities.length > 0 ? (
-            <ul className="space-y-2 text-sm list-disc list-inside">
-              {patient.disabilities.map((item, i) => (
-                <li key={i}>
-                  {item.disability}:{' '}
-                  <span className="text-muted-foreground">{item.details}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
-        
-        {/* Incapacities */}
-        <SectionCard title="Incapacidades" icon={FileText} form={<IncapacityForm />}>
-             {patient.incapacities && patient.incapacities.length > 0 ? (
-                <div className="space-y-2">
-                    {patient.incapacities.map((item, i) => {
-                        const totalDays = differenceInDays(new Date(item.endDate), new Date(item.startDate));
-                        return (
-                            <div key={i} className="text-sm p-3 bg-secondary/50 rounded-md">
-                                <div className="flex justify-between items-center mb-1">
-                                    <p className="font-semibold">{item.specialty} - <span className='capitalize'>{item.type}</span></p>
-                                    <Badge variant={item.status === 'Activa' ? 'default' : item.status === 'Finalizada' ? 'outline' : 'destructive'}>{item.status}</Badge>
-                                </div>
-                                <p className="text-muted-foreground">{item.detail}</p>
-                                <Separator className="my-2" />
-                                <div className="flex justify-between text-xs text-muted-foreground">
-                                    <span>Inicio: {format(new Date(item.startDate), 'P', { locale: es })}</span>
-                                    <span>Fin: {format(new Date(item.endDate), 'P', { locale: es })}</span>
-                                    <span>Días: {totalDays}</span>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            ) : (
-                <p className="text-sm text-muted-foreground">No hay datos de incapacidades registrados.</p>
-            )}
-        </SectionCard>
-
-
-        {/* Vaccinations */}
-        <SectionCard
-          title="Vacunaciones"
-          icon={Syringe}
-          form={<VaccinationForm />}
-        >
-          {patient.vaccinations && patient.vaccinations.length > 0 ? (
-            <ul className="space-y-2 text-sm list-disc list-inside">
-              {patient.vaccinations.map((item, i) => (
-                <li key={i}>
-                  {item.vaccine} -{' '}
-                  <span className="text-muted-foreground">
-                    {format(new Date(item.date), 'dd/MM/yyyy')}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
-
-        {/* Current Medication */}
-        <SectionCard
-          title="Medicación Actual"
-          icon={Pill}
-          form={<MedicationForm />}
-        >
-          {patient.currentMedication &&
-          patient.currentMedication.length > 0 ? (
-            <div className="space-y-2">
-              {patient.currentMedication.map((med, i) => (
-                <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
-                  <p className="font-semibold">{med.medication}</p>
-                  <p className="text-muted-foreground">
-                    {med.dosage} - {med.frequency}
-                  </p>
-                </div>
-              ))}
+        </TabsContent>
+        <TabsContent value="contacts">
+            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
+                <p>Sección de Contactos en construcción.</p>
             </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No hay datos registrados.
-            </p>
-          )}
-        </SectionCard>
-      </div>
+        </TabsContent>
+        <TabsContent value="evolution">
+            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
+                <p>Sección de Evolución en construcción.</p>
+            </div>
+        </TabsContent>
+        <TabsContent value="history">
+            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
+                <p>Sección de Historial en construcción.</p>
+            </div>
+        </TabsContent>
+        <TabsContent value="security">
+            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
+                <p>Sección de Seguridad en construcción.</p>
+            </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
+
+    
