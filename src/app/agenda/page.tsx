@@ -69,7 +69,7 @@ export default function AgendaPage() {
     <div className="flex flex-col gap-8">
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">Agenda / Calendario</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Agenda</h1>
           <p className="text-muted-foreground">
             Vista de citas programadas. Seleccione un día para ver los detalles.
           </p>
@@ -82,10 +82,10 @@ export default function AgendaPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div className="md:col-span-2">
             <Card>
-                <CardContent className="p-0">
+                <CardContent className="p-0 flex justify-center">
                     <Calendar
                         mode="single"
                         selected={date}
@@ -96,7 +96,7 @@ export default function AgendaPage() {
                 </CardContent>
             </Card>
         </div>
-        <div className="md:col-span-2">
+        <div className="md:col-span-3">
           <Card className="min-h-[365px]">
             <CardHeader>
               <CardTitle className="capitalize">
