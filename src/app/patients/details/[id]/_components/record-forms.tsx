@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const commonFields = (
   <>
@@ -22,12 +23,26 @@ export const OccupationForm = () => (
   <div className="space-y-4">
     {commonFields}
     <div className="space-y-2">
-      <Label htmlFor="occupation">Ocupación</Label>
-      <Input
-        id="occupation"
-        name="occupation"
-        placeholder="Ej: Arquitecto"
-        required
+      <Label htmlFor="occupation_select">Ocupación</Label>
+      <Select name="occupation" required>
+        <SelectTrigger id="occupation_select">
+          <SelectValue placeholder="Seleccione una ocupación..." />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="arquitecto">Arquitecto</SelectItem>
+          <SelectItem value="ingeniero">Ingeniero</SelectItem>
+          <SelectItem value="docente">Docente</SelectItem>
+          <SelectItem value="medico">Médico</SelectItem>
+          <SelectItem value="otro">Otro (especificar en notas)</SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+    <div className="space-y-2">
+      <Label htmlFor="occupation_notes">Notas Adicionales</Label>
+      <Textarea
+        id="occupation_notes"
+        name="notes"
+        placeholder="Ej: Trabaja en oficina, muchas horas sentado."
       />
     </div>
   </div>
@@ -37,15 +52,26 @@ export const LifestyleForm = () => (
   <div className="space-y-4">
     {commonFields}
     <div className="space-y-2">
-      <Label htmlFor="lifestyle_title">Hábito</Label>
-      <Input id="lifestyle_title" name="title" placeholder="Ej: Ejercicio" required />
+      <Label htmlFor="lifestyle_select">Hábito / Deporte</Label>
+       <Select name="title" required>
+        <SelectTrigger id="lifestyle_select">
+          <SelectValue placeholder="Seleccione un hábito..." />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="ciclismo">Ciclismo</SelectItem>
+          <SelectItem value="natacion">Natación</SelectItem>
+          <SelectItem value="gimnasio">Gimnasio</SelectItem>
+          <SelectItem value="yoga">Yoga</SelectItem>
+          <SelectItem value="otro">Otro (especificar en notas)</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
     <div className="space-y-2">
-      <Label htmlFor="lifestyle_description">Descripción</Label>
+      <Label htmlFor="lifestyle_description">Descripción / Notas</Label>
       <Textarea
         id="lifestyle_description"
         name="description"
-        placeholder="Ej: Corre 3 veces por semana"
+        placeholder="Ej: Corre 3 veces por semana, aprox. 5km."
         required
       />
     </div>
@@ -60,8 +86,21 @@ export const AllergyForm = () => (
       <Input id="substance" name="substance" placeholder="Ej: Penicilina" required />
     </div>
     <div className="space-y-2">
-      <Label htmlFor="reaction">Reacción</Label>
-      <Input id="reaction" name="reaction" placeholder="Ej: Urticaria" required />
+      <Label htmlFor="start_date">Fecha de Inicio / Detección</Label>
+      <Input id="start_date" name="start_date" type="date" required />
+    </div>
+     <div className="space-y-2">
+      <Label htmlFor="status">Estado</Label>
+      <Select name="status" required>
+        <SelectTrigger id="status">
+          <SelectValue placeholder="Seleccione un estado..." />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="controlado">Controlado</SelectItem>
+          <SelectItem value="no_controlado">No Controlado</SelectItem>
+          <SelectItem value="en_observacion">En Observación</SelectItem>
+        </SelectContent>
+      </Select>
     </div>
     <div className="space-y-2">
       <Label htmlFor="severity">Severidad</Label>
@@ -75,6 +114,18 @@ export const AllergyForm = () => (
           <SelectItem value="severa">Severa</SelectItem>
         </SelectContent>
       </Select>
+    </div>
+    <div className="space-y-2">
+      <Label htmlFor="reaction">Reacciones</Label>
+      <Textarea id="reaction" name="reaction" placeholder="Ej: Urticaria, dificultad para respirar..." required />
+    </div>
+    <div className="space-y-2">
+      <Label htmlFor="medication">Medicación para la Alergia</Label>
+      <Input id="medication" name="medication" placeholder="Ej: Loratadina 10mg" />
+    </div>
+     <div className="space-y-2">
+      <Label htmlFor="notes">Notas Adicionales</Label>
+      <Textarea id="notes" name="notes" placeholder="Añadir comentarios..." />
     </div>
   </div>
 );
@@ -120,22 +171,91 @@ export const VaccinationForm = () => (
 export const MedicationForm = () => (
   <div className="space-y-4">
     {commonFields}
-    <div className="space-y-2">
-      <Label htmlFor="medication">Medicamento</Label>
-      <Input id="medication" name="medication" placeholder="Ej: Losartán" required />
+    
+    <div className="space-y-3">
+        <Label>Tipo de Fórmula</Label>
+        <RadioGroup name="formula_type" defaultValue="comercial" className="flex gap-4">
+            <div className="flex items-center space-x-2">
+                <RadioGroupItem value="comercial" id="comercial" />
+                <Label htmlFor="comercial" className="font-normal">Comercial</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+                <RadioGroupItem value="generico" id="generico" />
+                <Label htmlFor="generico" className="font-normal">Genérico</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+                <RadioGroupItem value="magistral" id="magistral" />
+                <Label htmlFor="magistral" className="font-normal">Magistral</Label>
+            </div>
+        </RadioGroup>
     </div>
+
     <div className="space-y-2">
-      <Label htmlFor="dosage">Dosis</Label>
-      <Input id="dosage" name="dosage" placeholder="Ej: 50mg" required />
+      <Label htmlFor="medication_name">Nombre del Medicamento</Label>
+      <Input id="medication_name" name="name" placeholder="Ej: Losartán" required />
     </div>
+    
+    <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+            <Label htmlFor="administration_route">Vía de Administración</Label>
+            <Input id="administration_route" name="route" placeholder="Ej: Oral" required />
+        </div>
+        <div className="space-y-2">
+            <Label htmlFor="presentation">Presentación</Label>
+            <Input id="presentation" name="presentation" placeholder="Ej: Pastillas, Jarabe" required />
+        </div>
+    </div>
+    
+    <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+            <Label htmlFor="dosage">Dosis</Label>
+            <Input id="dosage" name="dosage" placeholder="Ej: 50mg" required />
+        </div>
+        <div className="space-y-2">
+            <Label htmlFor="quantity">Cantidad</Label>
+            <Input id="quantity" name="quantity" type="number" placeholder="Ej: 30" required />
+        </div>
+    </div>
+    
+    <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+            <Label htmlFor="frequency">Frecuencia</Label>
+            <Input id="frequency" name="frequency" type="number" placeholder="Ej: 8" required />
+        </div>
+        <div className="space-y-2">
+            <Label htmlFor="frequency_unit">Unidad de Frecuencia</Label>
+            <Select name="frequency_unit" required>
+                <SelectTrigger id="frequency_unit"><SelectValue placeholder="Seleccione..." /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="horas">Horas</SelectItem>
+                    <SelectItem value="dias">Días</SelectItem>
+                    <SelectItem value="minutos">Minutos</SelectItem>
+                </SelectContent>
+            </Select>
+        </div>
+    </div>
+    
+    <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+            <Label htmlFor="duration">Duración</Label>
+            <Input id="duration" name="duration" type="number" placeholder="Ej: 30" required />
+        </div>
+        <div className="space-y-2">
+            <Label htmlFor="duration_unit">Unidad de Duración</Label>
+            <Select name="duration_unit" required>
+                <SelectTrigger id="duration_unit"><SelectValue placeholder="Seleccione..." /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="dias">Días</SelectItem>
+                    <SelectItem value="semanas">Semanas</SelectItem>
+                    <SelectItem value="meses">Meses</SelectItem>
+                </SelectContent>
+            </Select>
+        </div>
+    </div>
+
     <div className="space-y-2">
-      <Label htmlFor="frequency">Frecuencia</Label>
-      <Input
-        id="frequency"
-        name="frequency"
-        placeholder="Ej: 1 vez al día"
-        required
-      />
+      <Label htmlFor="medication_details">Comentario / Detalle</Label>
+      <Textarea id="medication_details" name="details" placeholder="Ej: Tomar con alimentos" />
     </div>
   </div>
 );

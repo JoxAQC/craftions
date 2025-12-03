@@ -27,6 +27,21 @@ export type Treatment = {
     description: string;
 }
 
+export type Medication = {
+    formula_type: 'comercial' | 'generico' | 'magistral';
+    name: string;
+    route: string;
+    dosage: string;
+    quantity: number;
+    presentation: string;
+    frequency: number;
+    frequency_unit: 'horas' | 'dias' | 'minutos';
+    duration: number;
+    duration_unit: 'dias' | 'semanas' | 'meses';
+    details?: string;
+}
+
+
 export type Patient = {
     id: string;
     name: string;
@@ -46,7 +61,7 @@ export type Patient = {
     chronicConditions?: { condition: string; diagnosed: string }[];
     disabilities?: { disability: string; details: string }[];
     vaccinations?: { vaccine: string; date: string }[];
-    currentMedication?: { medication: string; dosage: string; frequency: string }[];
+    currentMedication?: Medication[];
     incapacities?: { type: string; specialty: string; startDate: string; endDate: string, detail: string, status: string }[];
 }
 
@@ -82,8 +97,32 @@ export const PATIENTS_DATA: Patient[] = [
             { vaccine: 'COVID-19 (Refuerzo)', date: '2023-12-15' },
         ],
         currentMedication: [
-            { medication: 'Losartán', dosage: '50mg', frequency: '1 vez al día' },
-            { medication: 'Metformina', dosage: '850mg', frequency: '2 veces al día' },
+            { 
+                formula_type: 'generico',
+                name: 'Losartán',
+                dosage: '50mg',
+                route: 'Oral',
+                quantity: 30,
+                presentation: 'Pastillas',
+                frequency: 24,
+                frequency_unit: 'horas',
+                duration: 6,
+                duration_unit: 'meses',
+                details: 'Tomar por la mañana.'
+            },
+            {
+                formula_type: 'comercial',
+                name: 'Metformina',
+                dosage: '850mg',
+                route: 'Oral',
+                quantity: 60,
+                presentation: 'Pastillas',
+                frequency: 12,
+                frequency_unit: 'horas',
+                duration: 6,
+                duration_unit: 'meses',
+                details: 'Tomar con las comidas.'
+            }
         ],
         incapacities: [
             { type: 'Parcial', specialty: 'Traumatología', startDate: '2023-01-10', endDate: '2023-01-25', detail: 'Esguince de tobillo', status: 'Finalizada' }

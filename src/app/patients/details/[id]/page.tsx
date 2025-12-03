@@ -363,10 +363,14 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                     <div className="space-y-2">
                     {patient.currentMedication.map((med, i) => (
                         <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
-                        <p className="font-semibold">{med.medication}</p>
-                        <p className="text-muted-foreground">
-                            {med.dosage} - {med.frequency}
-                        </p>
+                            <p className="font-semibold">{med.name} ({med.dosage})</p>
+                            <p className="text-muted-foreground">
+                                {med.quantity} {med.presentation} - Vía {med.route}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                                Cada {med.frequency} {med.frequency_unit} por {med.duration} {med.duration_unit}
+                            </p>
+                             {med.details && <p className="text-xs italic text-muted-foreground pt-1">Nota: {med.details}</p>}
                         </div>
                     ))}
                     </div>
