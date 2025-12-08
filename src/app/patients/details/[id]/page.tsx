@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import {
@@ -13,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { PATIENTS_DATA } from '@/lib/data';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -32,7 +31,6 @@ import {
   History,
   ClipboardList,
   Heart,
-  FileKey,
   Eye,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -50,7 +48,6 @@ import { use } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { ViewRecordsDialog } from './_components/view-records-dialog';
 
 function InfoPill({
   label,
@@ -73,15 +70,15 @@ function SectionCard({
   icon: Icon,
   children,
   form,
-  records = [],
   recordType,
+  patientId,
 }: {
   title: string;
   icon: React.ElementType;
   children: React.ReactNode;
   form: React.ReactNode;
-  records?: any[];
   recordType: string;
+  patientId: string;
 }) {
   const { toast } = useToast();
   
@@ -101,16 +98,11 @@ function SectionCard({
           <CardTitle className="text-xl">{title}</CardTitle>
         </div>
          <div className="flex items-center gap-2">
-            <ViewRecordsDialog
-                title={`Historial de ${title}`}
-                records={records}
-                recordType={recordType}
-                editForm={form}
-            >
-                <Button variant="ghost" size="sm" className="h-8">
+            <Button variant="ghost" size="sm" className="h-8" asChild>
+                <Link href={`/patients/details/${patientId}/history/${recordType}`}>
                     <Eye className="mr-2 h-4 w-4" /> Ver Todo
-                </Button>
-            </ViewRecordsDialog>
+                </Link>
+            </Button>
             <AddRecordDialog title={`Añadir a ${title}`} form={form} onSave={handleSave}>
               <Button variant="outline" size="sm" className="h-8">
                 <PlusCircle className="mr-2 h-4 w-4" />
@@ -125,7 +117,8 @@ function SectionCard({
 }
 
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
-  const patient = PATIENTS_DATA.find((p) => p.id === use(params).id);
+  const patientId = use(params).id;
+  const patient = PATIENTS_DATA.find((p) => p.id === patientId);
 
   if (!patient) {
     notFound();
@@ -213,7 +206,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Occupation */}
-                <SectionCard title="Ocupación" icon={Briefcase} form={<OccupationForm />} recordType="occupation" records={patient.occupation ? [patient.occupation] : []}>
+                <SectionCard title="Ocupación" icon={Briefcase} form={<OccupationForm />} recordType="occupation" patientId={patient.id}>
                 {patient.occupation ? (
                     <p className="text-sm">{patient.occupation}</p>
                 ) : (
@@ -224,7 +217,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 </SectionCard>
 
                 {/* Lifestyle */}
-                <SectionCard title="Estilo de Vida" icon={Apple} form={<LifestyleForm />} recordType="lifestyle" records={patient.lifestyle}>
+                <SectionCard title="Estilo de Vida" icon={Apple} form={<LifestyleForm />} recordType="lifestyle" patientId={patient.id}>
                 {patient.lifestyle && patient.lifestyle.length > 0 ? (
                     <ul className="space-y-2 text-sm">
                     {patient.lifestyle.slice(0, 2).map((item, i) => (
@@ -242,7 +235,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 </SectionCard>
 
                 {/* Allergies */}
-                <SectionCard title="Alergias" icon={Shield} form={<AllergyForm />} recordType="allergy" records={patient.allergies}>
+                <SectionCard title="Alergias" icon={Shield} form={<AllergyForm />} recordType="allergy" patientId={patient.id}>
                 {patient.allergies && patient.allergies.length > 0 ? (
                     <div className="space-y-2">
                     {patient.allergies.slice(0, 1).map((allergy, i) => (
@@ -274,7 +267,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 icon={HeartPulse}
                 form={<ConditionForm />}
                 recordType="condition"
-                records={patient.chronicConditions}
+                patientId={patient.id}
                 >
                 {patient.chronicConditions && patient.chronicConditions.length > 0 ? (
                     <ul className="space-y-2 text-sm list-disc list-inside">
@@ -304,7 +297,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                     icon={Accessibility}
                     form={<></>} 
                     recordType="disability"
-                    records={patient.disabilities}
+                    patientId={patient.id}
                 >
                 {patient.disabilities && patient.disabilities.length > 0 ? (
                     <ul className="space-y-2 text-sm list-disc list-inside">
@@ -323,7 +316,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 </SectionCard>
                 
                 {/* Incapacities */}
-                <SectionCard title="Incapacidades" icon={FileText} form={<IncapacityForm />} recordType="incapacity" records={patient.incapacities}>
+                <SectionCard title="Incapacidades" icon={FileText} form={<IncapacityForm />} recordType="incapacity" patientId={patient.id}>
                     {patient.incapacities && patient.incapacities.length > 0 ? (
                         <div className="space-y-2">
                             {patient.incapacities.slice(0,1).map((item, i) => {
@@ -357,7 +350,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 icon={Syringe}
                 form={<VaccinationForm />}
                 recordType="vaccination"
-                records={patient.vaccinations}
+                patientId={patient.id}
                 >
                 {patient.vaccinations && patient.vaccinations.length > 0 ? (
                     <ul className="space-y-2 text-sm list-disc list-inside">
@@ -383,7 +376,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 icon={Pill}
                 form={<MedicationForm />}
                 recordType="medication"
-                records={patient.currentMedication}
+                patientId={patient.id}
                 >
                 {patient.currentMedication &&
                 patient.currentMedication.length > 0 ? (
