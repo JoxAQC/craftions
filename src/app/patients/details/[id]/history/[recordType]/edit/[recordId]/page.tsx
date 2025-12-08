@@ -31,7 +31,7 @@ const getFormComponent = (recordType: string) => {
 
 const getRecordTitle = (recordType: string, record: any) => {
     switch(recordType) {
-        case 'occupation': return record;
+        case 'occupation': return typeof record === 'object' && record !== null ? record.occupation || 'Ocupación' : record;
         case 'lifestyle': return record.title;
         case 'allergy': return record.substance;
         case 'condition': return record.condition;
@@ -57,7 +57,8 @@ export default function EditRecordPage() {
     const recordSource = useMemo(() => {
         if (!patient || !recordType) return [];
         switch (recordType) {
-            case 'occupation': return patient.occupation ? [patient.occupation] : [];
+            case 'occupation': 
+                return patient.occupation ? [{ occupation: patient.occupation, comments: [] }] : [];
             case 'lifestyle': return patient.lifestyle || [];
             case 'allergy': return patient.allergies || [];
             case 'condition': return patient.chronicConditions || [];

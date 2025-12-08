@@ -29,7 +29,7 @@ const RecordItem = ({ record, recordType, patientId, index }: { record: any, rec
     const renderRecordContent = () => {
         switch (recordType) {
             case 'occupation':
-                return <p>Ocupación: {record}</p>;
+                return <p>Ocupación: {record.occupation}</p>;
             case 'lifestyle':
                 return <>
                     <p className="font-semibold">{record.title}</p>
@@ -117,7 +117,7 @@ export default function HistoryListPage() {
         if (!data) return [];
         // The 'occupation' is a single string, not an array. We wrap it for consistency.
         if (recordType === 'occupation' && typeof data === 'string') {
-            return [data];
+            return [{ occupation: data, comments: [] }];
         }
         return Array.isArray(data) ? data : [];
     }, [patient, recordInfo.dataKey, recordType]);
