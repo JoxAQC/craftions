@@ -65,7 +65,7 @@ export default function RootLayout({
                   <SidebarMenu>
                     {navLinks.map((link) => (
                       <SidebarMenuItem key={link.href}>
-                         <Link href={link.href} passHref legacyBehavior>
+                         <Link href={link.href}>
                            <SidebarMenuButton isActive={pathname.startsWith(link.href)} tooltip={link.label}>
                              <link.icon/>
                              <span>{link.label}</span>
