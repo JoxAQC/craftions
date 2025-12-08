@@ -37,7 +37,10 @@ export function AddRecordDialog({
   
   // This allows the dialog to be controlled by the child trigger
   const trigger = cloneElement(children, {
-    onClick: () => setIsOpen(true),
+    onClick: (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsOpen(true);
+    },
   });
 
   return (
@@ -45,7 +48,7 @@ export function AddRecordDialog({
       <DialogTrigger asChild>
         {trigger}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]" onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
