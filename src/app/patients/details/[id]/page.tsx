@@ -91,16 +91,18 @@ function SectionCard({
   };
 
   return (
-    <Card>
+    <Card className="shadow-sm hover:shadow-md transition-shadow duration-300">
       <CardHeader className="flex flex-row items-start justify-between">
         <div className="flex items-center gap-3">
-          <Icon className="w-6 h-6 text-primary" />
+          <div className="p-3 bg-primary/10 rounded-lg">
+            <Icon className="w-7 h-7 text-primary" />
+          </div>
           <CardTitle className="text-xl">{title}</CardTitle>
         </div>
          <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="h-8" asChild>
                 <Link href={`/patients/details/${patientId}/history/${recordType}`}>
-                    <Eye className="mr-2 h-4 w-4" /> Ver Todo
+                    <Eye className="mr-2 h-4 w-4" /> Ver Historial
                 </Link>
             </Button>
             <AddRecordDialog title={`Añadir a ${title}`} form={form} onSave={handleSave}>
@@ -111,7 +113,7 @@ function SectionCard({
             </AddRecordDialog>
         </div>
       </CardHeader>
-      <CardContent className="pt-2">{children}</CardContent>
+      <CardContent className="pt-0">{children}</CardContent>
     </Card>
   );
 }
@@ -141,7 +143,9 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <User className="w-6 h-6 text-primary" />
+            <div className='p-2 bg-primary/10 rounded-md'>
+                <User className="w-6 h-6 text-primary" />
+            </div>
             <CardTitle className="text-xl">Información Personal</CardTitle>
           </div>
           <CardDescription>Datos demográficos y de contacto.</CardDescription>
@@ -179,7 +183,9 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
              <Card className="mb-8">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                    <Heart className="w-6 h-6 text-primary"/>
+                    <div className="p-2 bg-primary/10 rounded-md">
+                        <Heart className="w-6 h-6 text-primary"/>
+                    </div>
                     <CardTitle className="text-xl">Información Médica Clave</CardTitle>
                 </div>
                 <CardDescription>Datos médicos esenciales del paciente.</CardDescription>
@@ -208,7 +214,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 {/* Occupation */}
                 <SectionCard title="Ocupación" icon={Briefcase} form={<OccupationForm />} recordType="occupation" patientId={patient.id}>
                 {patient.occupation ? (
-                    <p className="text-sm">{patient.occupation}</p>
+                    <p className="text-sm p-3 bg-secondary/50 rounded-md">{patient.occupation}</p>
                 ) : (
                     <p className="text-sm text-muted-foreground">
                     No hay datos registrados.
@@ -221,7 +227,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 {patient.lifestyle && patient.lifestyle.length > 0 ? (
                     <ul className="space-y-2 text-sm">
                     {patient.lifestyle.slice(0, 2).map((item, i) => (
-                        <li key={i}>
+                        <li key={i} className="p-3 bg-secondary/50 rounded-md">
                         <span className="font-semibold">{item.title}:</span>{' '}
                         {item.description}
                         </li>
@@ -239,7 +245,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 {patient.allergies && patient.allergies.length > 0 ? (
                     <div className="space-y-2">
                     {patient.allergies.slice(0, 1).map((allergy, i) => (
-                        <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
+                        <div key={i} className="text-sm p-3 bg-secondary/50 rounded-md">
                         <div className="flex justify-between items-center">
                             <p className="font-semibold">{allergy.substance}</p>
                             <Badge
@@ -272,7 +278,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 {patient.chronicConditions && patient.chronicConditions.length > 0 ? (
                     <ul className="space-y-2 text-sm list-disc list-inside">
                     {patient.chronicConditions.slice(0,2).map((item, i) => (
-                        <li key={i}>
+                        <li key={i} className="p-2">
                         {item.condition}{' '}
                         <span className="text-muted-foreground">
                             (Diagnóstico:{' '}
@@ -355,7 +361,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 {patient.vaccinations && patient.vaccinations.length > 0 ? (
                     <ul className="space-y-2 text-sm list-disc list-inside">
                     {patient.vaccinations.slice(0,2).map((item, i) => (
-                        <li key={i}>
+                        <li key={i} className="p-2">
                         {item.vaccine} -{' '}
                         <span className="text-muted-foreground">
                             {format(new Date(item.date), 'dd/MM/yyyy')}
@@ -382,7 +388,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 patient.currentMedication.length > 0 ? (
                     <div className="space-y-2">
                     {patient.currentMedication.slice(0,1).map((med, i) => (
-                        <div key={i} className="text-sm p-2 bg-secondary/50 rounded-md">
+                        <div key={i} className="text-sm p-3 bg-secondary/50 rounded-md">
                             <p className="font-semibold">{med.name} ({med.dosage})</p>
                             <p className="text-muted-foreground">
                                 {med.quantity} {med.presentation} - Vía {med.route}

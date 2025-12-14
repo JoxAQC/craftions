@@ -189,35 +189,34 @@ export default function CreateTemplatePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-4" onDrop={handleDrop}>
                 {fields.map((field, index) => (
                   <div
                     key={field.id}
-                    className="p-4 border rounded-lg relative space-y-4 bg-secondary/30 flex items-center gap-4"
+                    className="p-4 border rounded-lg relative space-y-4 bg-background shadow-sm flex items-start gap-4 transition-all"
                     draggable
                     onDragStart={() => handleDragStart(index)}
                     onDragOver={(e) => handleDragOver(e, index)}
-                    onDrop={handleDrop}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 pt-2">
                         <GripVertical className="cursor-move text-muted-foreground" />
                         <span className="font-bold text-lg text-primary">{index + 1}.</span>
                     </div>
                     <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
-                        <div>
+                        <div className="flex flex-col gap-1">
                             <FormLabel>Nombre del Campo</FormLabel>
-                            <div className="flex items-center gap-2 mt-1">
-                                <p className="font-semibold">{field.name}</p>
+                            <div className="flex items-center gap-2">
+                                <p className="font-semibold text-sm">{field.name}</p>
                                 <Badge variant="secondary">Predefinido</Badge>
                             </div>
                         </div>
-                        <div>
+                        <div className="flex flex-col gap-1">
                             <FormLabel>Tipo de Dato</FormLabel>
-                            <Badge variant="outline" className="capitalize mt-1">{field.data_type}</Badge>
+                            <Badge variant="outline" className="capitalize w-fit">{field.data_type}</Badge>
                         </div>
-                        <div>
+                        <div className="flex flex-col gap-1">
                             <FormLabel>Unidad</FormLabel>
-                            <p className="text-sm text-muted-foreground mt-1">{field.unit || 'N/A'}</p>
+                            <p className="text-sm text-muted-foreground">{field.unit || 'N/A'}</p>
                         </div>
                          <FormField
                             control={form.control}
@@ -245,9 +244,9 @@ export default function CreateTemplatePage() {
                     </div>
                     <Button
                       type="button"
-                      variant="destructive"
+                      variant="ghost"
                       size="icon"
-                      className="shrink-0"
+                      className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
                       onClick={() => remove(index)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -256,7 +255,7 @@ export default function CreateTemplatePage() {
                   </div>
                 ))}
                  {fields.length === 0 && (
-                  <div className="text-center text-muted-foreground py-8">
+                  <div className="text-center text-muted-foreground py-8 border-2 border-dashed rounded-lg">
                     Aún no ha añadido campos.
                   </div>
                 )}
@@ -270,7 +269,7 @@ export default function CreateTemplatePage() {
                         aria-expanded={open}
                         className="mt-6"
                     >
-                        <Plus className="mr-2 h-4 w-4" /> Añadir Campo
+                        <Plus className="mr-2 h-4 w-4" /> Añadir Campo Predefinido
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-[400px] p-0">

@@ -33,10 +33,10 @@ export default function DashboardPage() {
              <div className='flex justify-between items-start'>
                 <div className='flex flex-col gap-1'>
                     <CardTitle className="text-base font-semibold">Citas para Hoy</CardTitle>
-                    <div className="text-3xl font-bold">12</div>
+                    <div className="text-4xl font-bold">12</div>
                 </div>
-                <div className="p-3 bg-primary/10 rounded-md">
-                    <CalendarClock className="h-6 w-6 text-primary" />
+                <div className="p-3 bg-primary/10 rounded-lg">
+                    <CalendarClock className="h-8 w-8 text-primary" />
                 </div>
             </div>
           </CardHeader>
@@ -47,17 +47,17 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="hover:border-primary/80 transition-colors duration-300 ease-in-out shadow-sm hover:shadow-lg">
+        <Card className="hover:border-blue-500/80 transition-colors duration-300 ease-in-out shadow-sm hover:shadow-lg border-blue-500/20">
           <CardHeader>
             <div className='flex justify-between items-start'>
                 <div className='flex flex-col gap-1'>
                     <CardTitle className="text-base font-semibold">
                     Pacientes en Espera
                     </CardTitle>
-                    <div className="text-3xl font-bold">4</div>
+                    <div className="text-4xl font-bold">4</div>
                 </div>
-                <div className="p-3 bg-secondary rounded-md">
-                    <Hourglass className="h-6 w-6 text-secondary-foreground" />
+                <div className="p-3 bg-blue-500/10 rounded-lg">
+                    <Hourglass className="h-8 w-8 text-blue-500" />
                 </div>
             </div>
           </CardHeader>
@@ -68,17 +68,17 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="hover:border-primary/80 transition-colors duration-300 ease-in-out shadow-sm hover:shadow-lg">
+        <Card className="hover:border-green-500/80 transition-colors duration-300 ease-in-out shadow-sm hover:shadow-lg border-green-500/20">
            <CardHeader>
             <div className='flex justify-between items-start'>
                 <div className='flex flex-col gap-1'>
                     <CardTitle className="text-base font-semibold">
                     Vacunas del Día
                     </CardTitle>
-                    <div className="text-3xl font-bold">+42</div>
+                    <div className="text-4xl font-bold">+42</div>
                 </div>
-                <div className="p-3 bg-green-500/10 rounded-md">
-                    <Syringe className="h-6 w-6 text-green-500" />
+                <div className="p-3 bg-green-500/10 rounded-lg">
+                    <Syringe className="h-8 w-8 text-green-500" />
                 </div>
             </div>
           </CardHeader>
@@ -94,10 +94,10 @@ export default function DashboardPage() {
                     <CardTitle className="text-base font-semibold">
                     Alertas de Stock
                     </CardTitle>
-                    <div className="text-3xl font-bold">3</div>
+                    <div className="text-4xl font-bold">3</div>
                 </div>
-                <div className="p-3 bg-destructive/10 rounded-md">
-                    <AlertTriangle className="h-6 w-6 text-destructive" />
+                <div className="p-3 bg-destructive/10 rounded-lg">
+                    <AlertTriangle className="h-8 w-8 text-destructive" />
                 </div>
             </div>
           </CardHeader>
@@ -120,8 +120,8 @@ export default function DashboardPage() {
           <CardContent>
             <ul className="space-y-4">
               <li className="flex items-center gap-4">
-                <div className="p-2 bg-secondary rounded-full">
-                  <UserCheck className="w-5 h-5 text-secondary-foreground" />
+                <div className="p-3 bg-primary/10 rounded-full">
+                  <UserCheck className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <p className="font-medium">Nueva cita programada</p>
@@ -131,8 +131,8 @@ export default function DashboardPage() {
                 </div>
               </li>
               <li className="flex items-center gap-4">
-                <div className="p-2 bg-secondary rounded-full">
-                  <Archive className="w-5 h-5 text-secondary-foreground" />
+                <div className="p-3 bg-secondary rounded-full">
+                  <Archive className="w-6 h-6 text-secondary-foreground" />
                 </div>
                 <div>
                   <p className="font-medium">
@@ -154,8 +154,8 @@ export default function DashboardPage() {
           <CardContent>
             <ul className="space-y-4">
               <li className="flex items-center gap-4">
-                <div className="p-2 bg-destructive/20 rounded-full">
-                  <FlaskConical className="w-5 h-5 text-destructive" />
+                <div className="p-3 bg-destructive/10 rounded-full">
+                  <FlaskConical className="w-6 h-6 text-destructive" />
                 </div>
                 <div>
                   <p className="font-medium">
@@ -167,8 +167,8 @@ export default function DashboardPage() {
                 </div>
               </li>
               <li className="flex items-center gap-4">
-                <div className="p-2 bg-secondary rounded-full">
-                  <Users className="w-5 h-5 text-secondary-foreground" />
+                <div className="p-3 bg-blue-500/10 rounded-full">
+                  <Users className="w-6 h-6 text-blue-500" />
                 </div>
                 <div>
                   <p className="font-medium">Confirmar seguimiento</p>
