@@ -32,6 +32,10 @@ import {
   ClipboardList,
   Heart,
   Eye,
+  FileSignature,
+  Activity,
+  Phone,
+  BarChart2,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { AddRecordDialog } from './_components/add-record-dialog';
@@ -48,6 +52,9 @@ import { use } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis } from 'recharts';
+import { Switch } from '@/components/ui/switch';
+
 
 function InfoPill({
   label,
@@ -117,6 +124,34 @@ function SectionCard({
     </Card>
   );
 }
+
+const EvolutionChart = () => {
+    const data = [
+        { month: 'Ene', weight: 65 },
+        { month: 'Feb', weight: 65.5 },
+        { month: 'Mar', weight: 66 },
+        { month: 'Abr', weight: 65 },
+        { month: 'May', weight: 64.5 },
+        { month: 'Jun', weight: 64 },
+    ];
+    return (
+        <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={data}>
+                <defs>
+                    <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis domain={['dataMin - 2', 'dataMax + 2']} />
+                <RechartsTooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}/>
+                <Area type="monotone" dataKey="weight" stroke="hsl(var(--primary))" fillOpacity={1} fill="url(#colorWeight)" />
+            </AreaChart>
+        </ResponsiveContainer>
+    );
+};
 
 export default function PatientDetailPage({ params }: { params: { id: string } }) {
   const patientId = use(params).id;
@@ -408,25 +443,127 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                 </SectionCard>
             </div>
         </TabsContent>
-        <TabsContent value="contacts">
-            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
-                <p>Sección de Contactos en construcción.</p>
-            </div>
+        <TabsContent value="contacts" className="mt-6 space-y-6">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                        <CardTitle>Contactos de Emergencia</CardTitle>
+                        <CardDescription>Personas a notificar en caso de una emergencia.</CardDescription>
+                    </div>
+                    <Button><PlusCircle className="mr-2" /> Añadir Contacto</Button>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="p-4 border rounded-lg flex justify-between items-center bg-card">
+                        <div>
+                            <p className="font-semibold text-lg">Ana Pérez</p>
+                            <p className="text-muted-foreground">Esposa</p>
+                        </div>
+                        <div className="flex items-center gap-2 text-primary">
+                            <Phone className="h-5 w-5" />
+                            <a href="tel:+34655443322" className="font-semibold">+34 655 44 33 22</a>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </TabsContent>
-        <TabsContent value="evolution">
-            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
-                <p>Sección de Evolución en construcción.</p>
-            </div>
+        <TabsContent value="evolution" className="mt-6 space-y-6">
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                         <div className="p-2 bg-primary/10 rounded-md">
+                            <BarChart2 className="w-6 h-6 text-primary"/>
+                        </div>
+                        <div>
+                            <CardTitle>Evolución del Paciente</CardTitle>
+                            <CardDescription>Gráficos de seguimiento de métricas de salud.</CardDescription>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <h3 className="font-semibold mb-4">Evolución del Peso (Últimos 6 meses)</h3>
+                    <EvolutionChart />
+                </CardContent>
+            </Card>
         </TabsContent>
-        <TabsContent value="history">
-            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
-                <p>Sección de Historial en construcción.</p>
-            </div>
+        <TabsContent value="history" className="mt-6 space-y-6">
+             <Card>
+                <CardHeader>
+                    <CardTitle>Historial de Consultas</CardTitle>
+                    <CardDescription>Línea de tiempo de las visitas y eventos médicos importantes.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="relative pl-6 before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-border">
+                        <div className="relative mb-8">
+                            <div className="absolute -left-[34px] top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary ring-8 ring-background"></div>
+                            <p className="font-bold">10 de Mayo, 2024</p>
+                            <p className="text-muted-foreground">Consulta de Control de Hipertensión con Dr. García.</p>
+                        </div>
+                        <div className="relative mb-8">
+                            <div className="absolute -left-[34px] top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary ring-8 ring-background"></div>
+                            <p className="font-bold">20 de Febrero, 2024</p>
+                            <p className="text-muted-foreground">Analítica de sangre de rutina. Resultados estables.</p>
+                        </div>
+                        <div className="relative">
+                            <div className="absolute -left-[34px] top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary ring-8 ring-background"></div>
+                            <p className="font-bold">15 de Noviembre, 2023</p>
+                            <p className="text-muted-foreground">Consulta inicial. Diagnóstico de Diabetes tipo 2.</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </TabsContent>
-        <TabsContent value="security">
-            <div className="flex flex-col items-center justify-center text-center text-muted-foreground h-48 border-2 border-dashed rounded-lg mt-6">
-                <p>Sección de Seguridad en construcción.</p>
-            </div>
+        <TabsContent value="security" className="mt-6 space-y-6">
+            <Card>
+                <CardHeader>
+                     <div className="flex items-center gap-3">
+                         <div className="p-2 bg-primary/10 rounded-md">
+                            <FileSignature className="w-6 h-6 text-primary"/>
+                        </div>
+                        <div>
+                            <CardTitle>Consentimientos Informados</CardTitle>
+                            <CardDescription>Gestión de documentos y consentimientos firmados.</CardDescription>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                            <p className="font-medium">Consentimiento de Tratamiento de Datos</p>
+                            <p className="text-xs text-muted-foreground">Firmado el 15 de Noviembre, 2023</p>
+                        </div>
+                        <Button variant="outline" size="sm">Ver Documento</Button>
+                    </div>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                         <div className="p-2 bg-primary/10 rounded-md">
+                            <Activity className="w-6 h-6 text-primary"/>
+                        </div>
+                        <div>
+                            <CardTitle>Actividad de la Cuenta</CardTitle>
+                            <CardDescription>Control de accesos y notificaciones de seguridad.</CardDescription>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">Notificaciones por Email</p>
+                            <p className="text-xs text-muted-foreground">Recibir alertas de seguridad y recordatorios.</p>
+                        </div>
+                        <Switch defaultChecked />
+                    </div>
+                     <div className="flex items-center justify-between">
+                        <div>
+                            <p className="font-medium">Autenticación de Dos Factores (2FA)</p>
+                             <p className="text-xs text-muted-foreground">Añade una capa extra de seguridad a la cuenta.</p>
+                        </div>
+                        <Button variant="outline" size="sm">Activar</Button>
+                    </div>
+                </CardContent>
+            </Card>
         </TabsContent>
       </Tabs>
     </div>
